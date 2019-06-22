@@ -1,5 +1,5 @@
 (ns ring-app.core
-(:require [ring.adapter.jetty :as jetty]))
+  (:require [ring.adapter.jetty :as jetty]))
 
 (defn handler [request-map]
   {:status 200
