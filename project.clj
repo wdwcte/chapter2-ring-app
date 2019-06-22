@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [ring "1.6.3"]]
   :repl-options {:init-ns ring-app.core}
+  :plugins [[cider/cider-nrepl "0.22.0-beta4"]]
   :main ring-app.core)
