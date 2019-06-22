@@ -2,11 +2,11 @@
   (:require [ring.adapter.jetty :as jetty]
             [ring.util.http-response :as response]
             [ring.middleware.reload :refer [wrap-reload]]
-            [muuntaja.middlware :refer [wrap-format]]))
+            [muuntaja.middleware :refer [wrap-format]]))
 
 (defn handler [request]
   (response/ok
-   {:result (-> request :params :id)}))
+   {:result (-> request :body-params :id)}))
 
 (defn wrap-nocache [handler]
   ;; we return a handler. A handler takes a request, modifies it, and
@@ -21,15 +21,11 @@
                                                   ;; returned
         )))
 
-(defn wrap-formats [handler]
-  (wrap-format
-   handler))
-
 (defn -main []
   (jetty/run-jetty
    ;; create our handler from our middlewares. Note that we use a
    ;; var (the macro reader #'foo expands to `(var foo)`, but I don't
    ;; really understand why.
-   (-> #'handler wrap-nocache wrap-formats wrap-reload)
+   (-> #'handler wrap-nocache wrap-format wrap-reload)
    {:port 3000
     :join? false}))
