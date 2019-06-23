@@ -27,9 +27,15 @@
         (get-in request [:path-params :value])
         "</body></html>")))
 
+(defn api-multiply-handler [{params :body-params}]
+  (let [{:keys [a b]} params]
+    (response/ok {:result (* a b)})))
+
 (def routes
   [["/" {:get root-handler}]
    ["/json" {:post json-handler}]
+   ["/api" {:middleware [wrap-format]}
+    ["/multiply" {:post api-multiply-handler}]]
    ["/hello/:value" {:get hello-handler}]])
 
 (def handler
@@ -54,6 +60,6 @@
    ;; create our handler from our middlewares. Note that we use a
    ;; var (the macro reader #'foo expands to `(var foo)`, but I don't
    ;; really understand why.
-   (-> #'handler wrap-nocache wrap-format wrap-reload)
+   (-> #'handler wrap-nocache wrap-reload)
    {:port 3000
     :join? false}))
